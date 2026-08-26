@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b0f1a">
+    <title>Tic Tac Toe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg" aria-hidden="true">
+        <span class="orb orb-1"></span>
+        <span class="orb orb-2"></span>
+        <span class="orb orb-3"></span>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <main class="app">
+        <!-- ============ MENU SCREEN ============ -->
+        <section id="menu" class="screen menu is-active" aria-label="Main menu">
+            <div class="menu-inner">
+                <div class="brand">
+                    <div class="brand-mark" aria-hidden="true">
+                        <span class="bm bm-x">✕</span>
+                        <span class="bm bm-o">◯</span>
+                    </div>
+                    <h1 class="title">Tic&nbsp;Tac&nbsp;Toe</h1>
+                    <p class="subtitle">A polished take on the classic. Play a friend or challenge the AI.</p>
+                </div>
+
+                <div class="menu-card">
+                    <p class="field-label">Game mode</p>
+                    <div class="segmented" role="tablist" aria-label="Game mode">
+                        <button class="seg-btn is-selected" data-mode="pvp" role="tab" aria-selected="true">
+                            <span class="seg-icon">👥</span> 2 Players
+                        </button>
+                        <button class="seg-btn" data-mode="ai" role="tab" aria-selected="false">
+                            <span class="seg-icon">🤖</span> vs Computer
+                        </button>
+                    </div>
+
+                    <div class="ai-options" id="aiOptions" hidden>
+                        <div class="field">
+                            <p class="field-label">Difficulty</p>
+                            <div class="segmented segmented-sm" role="radiogroup" aria-label="Difficulty">
+                                <button class="seg-btn is-selected" data-diff="easy" role="radio" aria-checked="true">Easy</button>
+                                <button class="seg-btn" data-diff="medium" role="radio" aria-checked="false">Medium</button>
+                                <button class="seg-btn" data-diff="hard" role="radio" aria-checked="false">Hard</button>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <p class="field-label">You play as</p>
+                            <div class="segmented segmented-sm" role="radiogroup" aria-label="Your symbol">
+                                <button class="seg-btn is-selected mark-choice mark-x" data-symbol="X" role="radio" aria-checked="true">X</button>
+                                <button class="seg-btn mark-choice mark-o" data-symbol="O" role="radio" aria-checked="false">O</button>
+                            </div>
+                        </div>
+                        <p class="hint" id="diffHint">Easy — the computer plays random moves. Great for warming up.</p>
+                    </div>
+
+                    <button class="btn btn-primary btn-start" id="startBtn">
+                        <span>Start Game</span>
+                        <span class="btn-arrow" aria-hidden="true">→</span>
+                    </button>
+                </div>
+
+                <footer class="menu-foot">First to make a line of three wins. X always moves first.</footer>
+            </div>
+        </section>
+
+        <!-- ============ GAME SCREEN ============ -->
+        <section id="game" class="screen game" aria-label="Game board" hidden>
+            <header class="game-header">
+                <button class="icon-btn" id="backBtn" aria-label="Back to menu">
+                    <span aria-hidden="true">←</span> Menu
+                </button>
+                <div class="mode-pill" id="modePill">2 Players</div>
+                <button class="icon-btn" id="soundBtn" aria-label="Toggle sound" aria-pressed="true">
+                    <span id="soundIcon" aria-hidden="true">🔊</span>
+                </button>
+            </header>
+
+            <div class="scoreboard">
+                <div class="score" id="scoreX" data-player="X">
+                    <span class="score-badge">X</span>
+                    <span class="score-name" id="nameX">Player 1</span>
+                    <span class="score-count" id="countX">0</span>
+                </div>
+                <div class="score score-draw" id="scoreDraw">
+                    <span class="score-name">Draws</span>
+                    <span class="score-count" id="countDraw">0</span>
+                </div>
+                <div class="score" id="scoreO" data-player="O">
+                    <span class="score-badge">O</span>
+                    <span class="score-name" id="nameO">Player 2</span>
+                    <span class="score-count" id="countO">0</span>
+                </div>
+            </div>
+
+            <div class="turn" id="turn" aria-live="polite">
+                <span class="turn-dot" id="turnDot"></span>
+                <span id="turnText">Player 1's turn</span>
+            </div>
+
+            <div class="board-wrap">
+                <div class="board" id="board" role="grid" aria-label="Tic tac toe board">
+                    <!-- 9 cells injected by JS -->
+                </div>
+                <div class="win-line" id="winLine" aria-hidden="true"></div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-ghost" id="restartBtn">↺ New Round</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============ RESULT OVERLAY ============ -->
+    <div class="overlay" id="result" hidden>
+        <div class="result-card" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+            <div class="result-icon" id="resultIcon" aria-hidden="true"></div>
+            <h2 class="result-title" id="resultTitle">Winner</h2>
+            <p class="result-sub" id="resultSub"></p>
+            <div class="result-actions">
+                <button class="btn btn-primary" id="playAgainBtn">Play Again</button>
+                <button class="btn btn-ghost" id="toMenuBtn">Main Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <canvas id="confetti" aria-hidden="true"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
